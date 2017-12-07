@@ -3,6 +3,7 @@ package com.operator;
 import java.util.Map;
 
 import static com.constant.CommonConstant.CalculatorParam.*;
+import static com.constant.CommonConstant.ScreenParam.MAX_SIZE;
 
 /**
  * Created by caifangyi on 2017/12/5.
@@ -18,6 +19,10 @@ public class NumOperatorStrategy implements OperatorStrategy{
         String screenText = (String) map.get(SCREEN_TEXT);
 
         Boolean numInputFlag = (Boolean) map.get(NUM_INPUT_FLAG);
+
+        if(screenText.length()>=MAX_SIZE){
+            return map;
+        }
 
         if(!numInputFlag ) {
 

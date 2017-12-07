@@ -49,7 +49,6 @@ public class CommonConstant {
 
         public static final String BUTTON_DIVISION = "÷";
 
-        public static final String BUTTON_SQRT = "sqrt";
 
         /**
          * SET_OPERATOR
@@ -64,6 +63,7 @@ public class CommonConstant {
 
         public static final String BUTTON_POINT = ".";
 
+        public static final String BUTTON_SQRT = "sqrt";
         /**
          * RESULT_OPERATOR
          */
@@ -98,15 +98,15 @@ public class CommonConstant {
             resultOperatorList.add(BUTTON_CLAER);
         }
 
-        public static List<String> getRunOperatorList(){
+        public static final List<String> getRunOperatorList(){
             return runOperatorList;
         }
 
-        public static List<String> getSetOperatorList(){
+        public static final List<String> getSetOperatorList(){
             return setOperatorList;
         }
 
-        public static List<String> getResultOperatorList(){
+        public static final List<String> getResultOperatorList(){
             return resultOperatorList;
         }
 
@@ -118,13 +118,13 @@ public class CommonConstant {
         /**
          * regex
          */
-        public static final String REGEX_NUM = "/^[0-9]$/";
+        public static final String REGEX_NUM = "[0-9]";
 
-        public static final String REGEX_RUN_OPERATOR0 = "/^[+-*/{sqrt}]$/";
+        public static final String REGEX_RUN_OPERATOR0 = "\\+|-|×|÷";
 
-        public static final String REGEX_RESULT_OPERATOR = "/^[=C]$/";
+        public static final String REGEX_RESULT_OPERATOR = "=|C";
 
-        public static final String REGEX_SET_OPERATOR = "/^[.%{+/-}{1/x}]$/";
+        public static final String REGEX_SET_OPERATOR = "^(.|%|\\+/-|1/x|(sqrt)|(Back))$";
 
         public static final List<String> regexList = new ArrayList<String>();
 
@@ -133,13 +133,13 @@ public class CommonConstant {
         static {
             regexList.add(REGEX_NUM);
             regexList.add(REGEX_RUN_OPERATOR0);
-            regexList.add(REGEX_SET_OPERATOR);
             regexList.add(REGEX_RESULT_OPERATOR);
+            regexList.add(REGEX_SET_OPERATOR);
 
             regexMap.put(REGEX_NUM,StrategyName.NUM_OPERATOR);
             regexMap.put(REGEX_RUN_OPERATOR0,StrategyName.RUN_OPERATOR);
-            regexMap.put(REGEX_SET_OPERATOR,StrategyName.SET_OPERATOR);
             regexMap.put(REGEX_RESULT_OPERATOR,StrategyName.RESULT_OPERATOR);
+            regexMap.put(REGEX_SET_OPERATOR,StrategyName.SET_OPERATOR);
         }
 
         public static List<String> getRegexList(){
@@ -174,5 +174,9 @@ public class CommonConstant {
         public static final String NUM_INPUT_FLAG = "NUM_INPUT_FLAG";
     }
 
+    public static class ScreenParam{
+
+        public static final Integer MAX_SIZE = 15;
+    }
 
 }

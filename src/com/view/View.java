@@ -39,15 +39,14 @@ public class View extends JFrame implements ActionListener{
     
     private JButton numBtn[] = new JButton[10];
     
-    private JButton plusBtn,minusBtn,multipleBtn,divsionBtn,equalBtn,dBtn,pnBtn;
+    private JButton plusBtn,minusBtn,multipleBtn,divsionBtn,equalBtn,dBtn,pnBtn,
+            reciprocalBtn,percentBtn,sqrtBtn,backBtn,clearBtn;
     
     private String saveValue = "0";
 
     private String symbol;
     
     private Boolean numInputFlag = true;
-
-    private Map<String, Boolean> regexMap = new HashMap<String,Boolean>();
 
     private OperatorStrategyFactory operatorStrategyFactory = new OperatorStrategyFactory();
 
@@ -120,14 +119,28 @@ public class View extends JFrame implements ActionListener{
         pnBtn = new JButton(BUTTON_POSITIVE_NEGATIVE);
         pnBtn.addActionListener(this);
 
+        reciprocalBtn = new JButton(BUTTON_RECIPROCAL);
+        reciprocalBtn.addActionListener(this);
+
+        percentBtn = new JButton(BUTTON_PERCENT);
+        percentBtn.addActionListener(this);
+
+        sqrtBtn = new JButton(BUTTON_SQRT);
+        sqrtBtn.addActionListener(this);
+
+        backBtn = new JButton(BUTTON_BACK);
+        backBtn.addActionListener(this);
+
+        clearBtn = new JButton(BUTTON_CLAER);
+        clearBtn.addActionListener(this);
+
+
     }
 
     private JPanel backAndClearBtnPanel(){
         JPanel jPanel = new JPanel(new GridLayout(1,2));
         jPanel.setPreferredSize(new Dimension(100,50));
-        jPanel.add(new Button(BUTTON_BACK));
-        JButton clearBtn = new JButton(BUTTON_CLAER);
-        clearBtn.addActionListener(this);
+        jPanel.add(backBtn);
         jPanel.add(clearBtn);
 
         return jPanel;
@@ -156,9 +169,10 @@ public class View extends JFrame implements ActionListener{
         jPanel.add(dBtn);
         jPanel.add(plusBtn);
 
-        jPanel.add(new Button(BUTTON_RECIPROCAL));
-        jPanel.add(new Button(BUTTON_PERCENT));
-        jPanel.add(new Button(BUTTON_SQRT));
+
+        jPanel.add(reciprocalBtn);
+        jPanel.add(percentBtn);
+        jPanel.add(sqrtBtn);
         jPanel.add(equalBtn);
         return jPanel;
     }
@@ -173,6 +187,9 @@ public class View extends JFrame implements ActionListener{
 
 
         List<String> regexList = getRegexList();
+
+        Map<String, Boolean> regexMap = new HashMap<String,Boolean>();
+
 
         for(int i=0;i<regexList.size();i++){
 
@@ -194,9 +211,9 @@ public class View extends JFrame implements ActionListener{
             return;
         }
 
-        Map<String, String> regexMap = getRegexMap();
+        Map<String, String> strategyMap = getRegexMap();
 
-        Iterator<Map.Entry<String, Boolean>> iterator = this.regexMap.entrySet().iterator();
+        Iterator<Map.Entry<String, Boolean>> iterator = regexMap.entrySet().iterator();
 
         while(iterator.hasNext()){
 
@@ -213,7 +230,7 @@ public class View extends JFrame implements ActionListener{
                 map.put(SCREEN_TEXT,screenText);
                 map.put(NUM_INPUT_FLAG,numInputFlag);
 
-                String strategyName = regexMap.get(regex);
+                String strategyName = strategyMap.get(regex);
                 Map<String,Object> returnMap = operatorStrategyFactory
                         .getInstance(strategyName)
                         .execute(map,inputText);
@@ -226,8 +243,7 @@ public class View extends JFrame implements ActionListener{
             }
 
         }
-
-
+        screenField.setText(screenText);
 
         if(e.getActionCommand().equals(MENU_HELP_SUB_OTHER)){
             JOptionPane.showMessageDialog(this, "Help");

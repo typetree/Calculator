@@ -1,0 +1,16 @@
+<component name="ArtifactManager">
+  <artifact name="Calculator:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/Calculator_jar</output-path>
+    <root id="root">
+      <element id="archive" name="Calculator.jar">
+        <element id="directory" name="META-INF">
+          <element id="file-copy" path="$PROJECT_DIR$/src/main/resources/META-INF/MANIFEST.MF" />
+        </element>
+        <element id="module-output" name="Calculator" />
+      </element>
+      <element id="directory" name="lib">
+        <element id="file-copy" path="$PROJECT_DIR$/lib/javax.persistence.jar" />
+      </element>
+    </root>
+  </artifact>
+</component>

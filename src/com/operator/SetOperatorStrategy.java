@@ -1,9 +1,13 @@
 package com.operator;
 
+import javafx.stage.Screen;
+
+import java.math.BigDecimal;
 import java.util.Map;
 
 import static com.constant.CommonConstant.CalculatorParam.*;
 import static com.constant.CommonConstant.BUTTON.*;
+import static com.constant.CommonConstant.ScreenParam.MAX_SIZE;
 
 /**
  * Created by caifangyi on 2017/12/5.
@@ -19,62 +23,69 @@ public class SetOperatorStrategy implements OperatorStrategy{
         String screenText = (String) map.get(SCREEN_TEXT);
         Boolean numInputFlag = (Boolean) map.get(NUM_INPUT_FLAG);
 
-
-        if(screenText.indexOf(BUTTON_POINT) < 0 && inputText.equals(BUTTON_POINT)){
+        if (screenText.indexOf(BUTTON_POINT) < 0 && inputText.equals(BUTTON_POINT)) {
             //输入 .
             screenText = screenText + inputText;
+            numInputFlag = true;
 
-        }else if(inputText.equals(BUTTON_POSITIVE_NEGATIVE)){
+        } else if (inputText.equals(BUTTON_BACK)) {
 
-            //输入 +/-
-            if(screenText.indexOf(BUTTON_POINT) < 0){
-                screenText = String.valueOf(Integer.valueOf(screenText) * (-1));
-            }else{
-                screenText = String.valueOf(Float.valueOf(screenText) * (-1));
-            }
-
-        }else if(inputText.equals(BUTTON_RECIPROCAL)){
-            //输入 1/x
-
-
-        }else if(inputText.equals(BUTTON_BACK)){
             //输入 Back
-            if(symbol !=null && symbol != ""){
-                screenText = screenText.substring(0, screenText.length() - 2);
+            if(screenText.length()==1){
+                screenText = "0";
+
+            }else if (symbol == null || symbol == "") {
+
+                if(screenText.indexOf(BUTTON_POINT)==screenText.length()-1){
+
+                    screenText = screenText.substring(0, screenText.length() - 2);
+
+                }else{
+
+                    screenText = screenText.substring(0, screenText.length() - 1);
+                }
             }
 
-        }else if(inputText.equals(BUTTON_PERCENT)){
-            //输入 %
-            if(screenText.indexOf(BUTTON_POINT) < 0){
-                screenText = screenText + ".";
+        }else {
+
+            if (screenText.indexOf(BUTTON_POINT) == screenText.length() - 1) {
+                screenText = screenText.substring(0, screenText.length() - 1);
             }
-            int index = screenText.indexOf(".");
+            BigDecimal screenBig = new BigDecimal(screenText);
 
-            String leftPart = screenText.substring(0, index);
-            String rightPart = screenText.substring(index+1, screenText.length() - 1);
+            if (inputText.equals(BUTTON_POSITIVE_NEGATIVE)) {
+                //输入 +/-
+                screenBig = screenBig.negate();
 
-            if(index < 3) {
+            } else if (inputText.equals(BUTTON_RECIPROCAL)) {
+                //输入 1/x
+                if (!screenBig.equals(new BigDecimal(0))) {
+                    screenBig = new BigDecimal(1).divide(screenBig,MAX_SIZE,BigDecimal.ROUND_HALF_UP);
+                }
 
-                //如果不足三位数，用0补全三位
-                String temp = String.format("%3s", leftPart);
-                leftPart = temp.replaceAll("\\s","0");
+            } else if (inputText.equals(BUTTON_PERCENT)) {
+                //输入 %
+                screenBig = screenBig.divide(new BigDecimal(100));
 
-                screenText = leftPart + rightPart;
+            } else if(inputText.equals(BUTTON_SQRT)){
 
-            }else{
-                screenText = leftPart + rightPart;
+                screenBig = new BigDecimal(Math.sqrt(screenBig.doubleValue()));
+
+                if(screenBig.toString().length() > MAX_SIZE){
+
+                    screenBig = screenBig.setScale(MAX_SIZE, BigDecimal.ROUND_HALF_UP);
+                }
             }
 
-            screenText = screenText.substring(0, 2)
-                    + BUTTON_POINT
-                    + screenText.substring(2, screenText.length() - 1);
+
+            screenText = screenBig.toString();
+            numInputFlag = false;
         }
 
-        map.put(SYMBOL_VALUE,symbol);
-        map.put(SCREEN_TEXT,screenText);
-        map.put(NUM_INPUT_FLAG,numInputFlag);
+        map.put(SYMBOL_VALUE, symbol);
+        map.put(SCREEN_TEXT, screenText);
+        map.put(NUM_INPUT_FLAG, numInputFlag);
 
         return map;
     }
-
 }
